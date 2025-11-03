@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core'
 import { AuthType, ConditionGuard } from 'src/shared/constants/auth.constant'
 import { AUTH_TYPE_KEY, AuthTypeDecoratorPayload } from 'src/shared/decorators/auth.decorator'
 import { AccessTokenGuard } from 'src/shared/guards/access-token.guard'
-import { APIKeyGuard } from 'src/shared/guards/api-key.guard'
+import { APIKeyGuard } from 'src/shared/guards/payment-api-key.guard'
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
