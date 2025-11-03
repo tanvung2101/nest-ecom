@@ -21,9 +21,19 @@ import { ProductModule } from './routes/product/product.module'
 import { ProductTranslationModule } from './routes/product/product-translation/product-translation.module'
 import { CartModule } from './routes/cart/cart.module'
 import { OrderModule } from './routes/order/order.module'
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
-  imports: [I18nModule.forRoot({
+  imports: [
+    BullModule.forRoot({
+      connection: {
+        host: 'redis-10839.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+        port: 10839,
+        username: 'default',
+    password: 'A8ENqUXhfUfWs1ULZEYW5RG7uQb2VGse',
+      },
+    }),
+    I18nModule.forRoot({
     fallbackLanguage: 'en',
     loaderOptions: {
       path: path.resolve('src/i18n/'),
