@@ -35,10 +35,8 @@ export class CartRepo {
             throw NotFoundSKUException
         }
 
-        if (!cartItem) {
-            throw NotFoundCartItemException
-        }
-        if (isCreate && quantity + cartItem.quantity > sku.stock) {
+
+        if (cartItem && isCreate && quantity + cartItem.quantity > sku.stock) {
             throw InvalidQuantityException
         }
         // kiểm tra lượng hàng còn lại

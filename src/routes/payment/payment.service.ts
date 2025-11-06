@@ -4,9 +4,11 @@ import { WebhookPaymentBodyType } from "./payment.model";
 
 @Injectable()
 export class PaymentService {
-    constructor(private readonly paymentRepo: PaymentRepo){}
+    constructor(private readonly paymentRepo: PaymentRepo, // Inject the producer here
+    ) { }
 
-    receiver(body: WebhookPaymentBodyType){
-        return this.paymentRepo.receiver(body)
+    async receiver(body: WebhookPaymentBodyType) {
+        const result = await this.paymentRepo.receiver(body)
+        return result
     }
 }
