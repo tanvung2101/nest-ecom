@@ -5,35 +5,35 @@ import { CreateLanguageBodyType, LanguageType, UpdateLanguageBodyType } from "./
 @Injectable()
 export class LanguageRepo {
 
-    constructor(private prismaService:PrismaService){}
+    constructor(private prismaService: PrismaService) { }
 
-    findAll():Promise<LanguageType[]>{
+    findAll(): Promise<LanguageType[]> {
         return this.prismaService.language.findMany({
             where: {
                 deletedAt: null
             }
-        })
+        }) as any
     }
 
-    findById(id: string):Promise<LanguageType | null>{
+    findById(id: string): Promise<LanguageType | null> {
         return this.prismaService.language.findUnique({
             where: {
                 id,
                 deletedAt: null
             }
-        })
+        }) as any
     }
 
-    create({createdById, data}: {createdById: number; data: CreateLanguageBodyType}): Promise<LanguageType>{
+    create({ createdById, data }: { createdById: number; data: CreateLanguageBodyType }): Promise<LanguageType> {
         return this.prismaService.language.create({
             data: {
                 ...data,
                 createdById,
             }
-        })
+        }) as any
     }
 
-    update({id, updatedById, data}: {id: string, updatedById: number, data: UpdateLanguageBodyType}): Promise<LanguageType>{
+    update({ id, updatedById, data }: { id: string, updatedById: number, data: UpdateLanguageBodyType }): Promise<LanguageType> {
         return this.prismaService.language.update({
             where: {
                 id, deletedAt: null
@@ -42,22 +42,27 @@ export class LanguageRepo {
                 ...data,
                 updatedById
             }
-        })
+        }) as any
     }
 
-    delete(id: string, isHard?: boolean):Promise<LanguageType>{
-        return isHard ? this.prismaService.language.delete({
-            where: {
-                id,
-            }
-        }): this.prismaService.language.update({
-            where: {
-                id, deletedAt: null
-            },
-            data: {
-                deletedAt: new Date()
-            }
-        })
+    delete(id: string, isHard?: boolean): Promise<LanguageType> {
+        return (
+            isHard
+                ? this.prismaService.language.delete({
+                    where: {
+                        id,
+                    },
+                })
+                : this.prismaService.language.update({
+                    where: {
+                        id,
+                        deletedAt: null,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                })
+        ) as any
     }
 
 

@@ -23,6 +23,8 @@ import { CartModule } from './routes/cart/cart.module'
 import { OrderModule } from './routes/order/order.module'
 import { BullModule } from '@nestjs/bullmq';
 import { PaymentConsumer } from './queues/payment.consumer'
+import { WebsocketModule } from './websockets/websocket.module'
+import { ProfileModule } from './routes/profile/profile.module'
 
 @Module({
   imports: [
@@ -46,7 +48,7 @@ import { PaymentConsumer } from './queues/payment.consumer'
     ],
     typesOutputPath: path.resolve('src/generated/i18n.generated.ts'),
   }), SharedModule, AuthModule, LanguageModule, PermissionModule, RoleModule, MediaModule, BrandModule, BrandTranslationModule, CategoryTranslationModule, CategoryModule,
-    ProductModule, ProductTranslationModule,CartModule,OrderModule
+    ProductModule, ProductTranslationModule,CartModule,OrderModule,WebsocketModule,ProfileModule
   ],
   controllers: [AppController],
   providers: [

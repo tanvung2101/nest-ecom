@@ -1,4 +1,3 @@
-
 import { ProductTranslationSchema } from 'src/shared/models/shared-product-translation.model'
 import { ProductSchema } from 'src/shared/models/shared-product.model'
 import { SKUSchema } from 'src/shared/models/shared-sku.model'
@@ -11,8 +10,8 @@ export const CartItemSchema = z.object({
   skuId: z.number(),
   userId: z.number(),
 
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 })
 
 export const GetCartItemParamsSchema = z.object({
@@ -23,20 +22,23 @@ export const CartItemDetailSchema = z.object({
   shop: UserSchema.pick({
     id: true,
     name: true,
-    avatar: true
+    avatar: true,
   }),
-  cartItems: z.array(CartItemSchema.extend({
-    sku: SKUSchema.extend({
-      product: ProductSchema.extend({
-        productTranslations: z.array(ProductTranslationSchema.omit({
-          createdById: true,
-          updatedById: true,
-          deletedById: true,
-          deletedAt: true,
-          createdAt: true,
-          updatedAt: true,
-        }),),
-      }).omit({
+  cartItems: z.array(
+    CartItemSchema.extend({
+      sku: SKUSchema.extend({
+        product: ProductSchema.extend({
+          productTranslations: z.array(
+            ProductTranslationSchema.omit({
+              createdById: true,
+              updatedById: true,
+              deletedById: true,
+              deletedAt: true,
+              createdAt: true,
+              updatedAt: true,
+            }),
+          ),
+        }).omit({
           createdById: true,
           updatedById: true,
           deletedById: true,
@@ -44,7 +46,7 @@ export const CartItemDetailSchema = z.object({
           createdAt: true,
           updatedAt: true,
         }),
-    }).omit({
+      }).omit({
         createdById: true,
         updatedById: true,
         deletedById: true,
@@ -52,10 +54,9 @@ export const CartItemDetailSchema = z.object({
         createdAt: true,
         updatedAt: true,
       }),
-  }))
+    }),
+  ),
 })
-
-
 
 export const GetCartResSchema = z.object({
   data: z.array(CartItemDetailSchema),

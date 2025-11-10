@@ -19,7 +19,7 @@ export class AuthRepository {
         password: true,
         totpSecret: true,
       },
-    })
+    }) as any
   }
 
   async createUserIncludeRole(
@@ -30,7 +30,7 @@ export class AuthRepository {
       include: {
         role: true
       }
-    })
+    })as any
   }
 
 
@@ -93,11 +93,11 @@ export class AuthRepository {
       include: {
         role: true,
       },
-    })
+    })as any
   }
 
 
-  async findUniqueRefreshTokenIncludeUserRole(where: { token: string }): Promise<(RefreshTokenType & { user: UserType & { role: RoleType } }) | null> {
+  findUniqueRefreshTokenIncludeUserRole(where: { token: string }): Promise<(RefreshTokenType & { user: UserType & { role: RoleType } }) | null> {
     return this.prismaService.refreshToken.findUnique({
       where,
       include: {
@@ -107,7 +107,7 @@ export class AuthRepository {
           }
         }
       }
-    })
+    }) as any
   }
 
   updateDevice(deviceId: number, data: Partial<DeviceType>): Promise<DeviceType> {
@@ -116,13 +116,13 @@ export class AuthRepository {
         id: deviceId
       },
       data
-    })
+    }) as any
   }
 
   deleteRefreshToken(where: { token: string }): Promise<RefreshTokenType> {
     return this.prismaService.refreshToken.delete({
       where
-    })
+    }) as any
   }
 
 
@@ -139,7 +139,7 @@ export class AuthRepository {
   ): Promise<VerificationCodeType> {
     return this.prismaService.verificationCode.delete({
       where: uniqueValue
-    })
+    }) as any
   }
 
 }

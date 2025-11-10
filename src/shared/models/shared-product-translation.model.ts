@@ -10,9 +10,9 @@ export const ProductTranslationSchema = z.object({
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
   deletedById: z.number().nullable(),
-  deletedAt: z.date().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  deletedAt: z.string().datetime().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 })
 
 export type ProductTranslationType = z.infer<typeof ProductTranslationSchema>

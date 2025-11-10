@@ -1,19 +1,5 @@
-import z from "zod";
-
-export const BrandTranslationSchema = z.object({
-  id: z.number(),
-  brandId: z.number(),
-  languageId: z.string(),
-  name: z.string().max(500),
-  description: z.string(),
-
-  createdById: z.number().nullable(),
-  updatedById: z.number().nullable(),
-  deletedById: z.number().nullable(),
-  deletedAt: z.date().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-})
+import { BrandTranslationSchema } from 'src/shared/models/shared-brand-translation.model'
+import { z } from 'zod'
 
 export const GetBrandTranslationParamsSchema = z
   .object({

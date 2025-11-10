@@ -13,8 +13,9 @@ import { TwoFactorService } from './services/2fa.service'
 import { SharedRoleRepository } from './repositories/shared-role.repo'
 import { S3Service } from './services/s3.service'
 import { SharedPaymentRepository } from './repositories/shared-payment.repo'
+import { SharedWebsocketRepository } from './repositories/sheard-websocket.repo'
 
-const sharedServices = [PrismaService, HashingService, TokenService, SharedUserRepository,EmailService, TwoFactorService, SharedRoleRepository, S3Service, SharedPaymentRepository]
+const sharedServices = [PrismaService, HashingService, TokenService, SharedUserRepository,EmailService, TwoFactorService, SharedRoleRepository, S3Service, SharedPaymentRepository, SharedWebsocketRepository]
 
 @Global()
 @Module({

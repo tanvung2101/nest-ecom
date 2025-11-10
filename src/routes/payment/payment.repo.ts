@@ -22,7 +22,7 @@ export class PaymentRepo {
         }, 0)
     }
 
-    async receiver(body: WebhookPaymentBodyType): Promise<MessageResType> {
+    async receiver(body: WebhookPaymentBodyType): Promise<number> {
         // 1 thêm thông tin giao dịch vào DB
         let amountIn = 0
         let amountOut = 0
@@ -41,7 +41,7 @@ export class PaymentRepo {
         if (paymentTransaction) {
             throw new BadRequestException('Transaction already exists')
         }
-        await this.prismaService.$transaction(async (tx) => {
+        const userId = await this.prismaService.$transaction(async (tx) => {
             await tx.paymentTransaction.create({
                 data: {
                     gateway: body.gateway,
@@ -78,12 +78,12 @@ export class PaymentRepo {
                         }
                     }
                 }
-            })
+            })as any
 
             if (!payment) {
                 throw new BadRequestException(`Cannot find payment with id ${paymentId}`)
             }
-
+            const userId = payment.orders[0].userId
             const { orders } = payment
             const totalPrice = this.getTotalPrice(orders)
             if (totalPrice !== body.transferAmount) {
@@ -117,9 +117,7 @@ export class PaymentRepo {
 
 
 
-        return {
-            message: 'Payment success',
-        }
+        return userId
 
     }
 }

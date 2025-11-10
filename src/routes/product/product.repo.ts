@@ -116,7 +116,7 @@ export class ProductRepo {
       page: page,
       limit: limit,
       totalPages: Math.ceil(totalItems / limit),
-    }
+    }as any
   }
 
   findById(productId: number): Promise<ProductType | null> {
@@ -125,7 +125,7 @@ export class ProductRepo {
         id: productId,
         deletedAt: null,
       },
-    })
+    })as any
   }
 
   getDetail({productId, languageId, isPublic}: {productId: number
@@ -176,7 +176,7 @@ export class ProductRepo {
           },
         },
       },
-    })
+    })as any
   }
 
 
@@ -229,7 +229,7 @@ export class ProductRepo {
           },
         },
       },
-    })
+    })as any
   }
 
 
@@ -313,7 +313,7 @@ export class ProductRepo {
       data: skusToCreate
     })
 
-    return product
+    return product as any
   }
 
 
@@ -332,7 +332,7 @@ export class ProductRepo {
       
       return this.prismaService.product.delete({
         where: {id}
-      })
+      })as any
     }
     const now = new Date()
     const [product] = await Promise.all([
@@ -367,7 +367,7 @@ export class ProductRepo {
         },
       }),
     ])
-    return product
+    return product as any
   }
 
 

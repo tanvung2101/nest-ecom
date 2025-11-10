@@ -49,7 +49,7 @@ export class CartRepo {
             throw ProductNotFoundException
         }
 
-        return sku
+        return sku as any
     }
 
 
@@ -241,7 +241,7 @@ export class CartRepo {
                 quantity: body.quantity,
             },
 
-        })
+        }) as any
     }
 
 
@@ -270,7 +270,7 @@ export class CartRepo {
             //   throw NotFoundCartItemException
             // }
             throw error
-        })
+        }) as any
     }
 
     delete(userId: number, body: DeleteCartBodyType): Promise<{ count: number }> {

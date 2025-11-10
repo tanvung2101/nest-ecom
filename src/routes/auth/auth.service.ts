@@ -98,7 +98,7 @@ export class AuthService {
       email: body.email,
       type: body.type,
       code,
-      expiresAt: addMilliseconds(new Date(), ms(envConfig.OTP_EXPRIRES_IN)),
+      expiresAt: addMilliseconds(new Date(), ms(envConfig.OTP_EXPRIRES_IN)).toISOString(),
     })
 
     // 3. Gửi mã OTP

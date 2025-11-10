@@ -1,9 +1,6 @@
-import { TypeOfVerificationCode, UserStatus } from "src/shared/constants/auth.constant"
-import { RoleSchema } from "src/shared/models/shared-role.model"
-import { UserSchema } from "src/shared/models/shared-user.model"
-import z from "zod"
-
-
+import { TypeOfVerificationCode } from 'src/shared/constants/auth.constant'
+import { UserSchema } from 'src/shared/models/shared-user.model'
+import { z } from 'zod'
 
 export const RegisterBodySchema = UserSchema.pick({
   email: true,
@@ -13,7 +10,7 @@ export const RegisterBodySchema = UserSchema.pick({
 })
   .extend({
     confirmPassword: z.string().min(6).max(100),
-    code: z.string().length(6)
+    code: z.string().length(6),
   })
   .strict()
   .superRefine(({ confirmPassword, password }, ctx) => {
@@ -26,14 +23,10 @@ export const RegisterBodySchema = UserSchema.pick({
     }
   })
 
-
-
 export const RegisterResSchema = UserSchema.omit({
   password: true,
   totpSecret: true,
 })
-
-
 
 export const VerificationCodeSchema = z.object({
   id: z.number(),
@@ -45,21 +38,25 @@ export const VerificationCodeSchema = z.object({
     TypeOfVerificationCode.LOGIN,
     TypeOfVerificationCode.DISABLE_2FA,
   ]),
-  expiresAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
+  expiresAt: z.string().datetime(),
+  createdAt: z.string().datetime(),
 })
-
 
 export const SendOTPBodySchema = VerificationCodeSchema.pick({
   email: true,
   type: true,
 }).strict()
 
-
-export const LoginBodySchema = UserSchema.pick({email: true, password: true}).extend({
+export const LoginBodySchema = UserSchema.pick({
+  email: true,
+  password: true,
+})
+  .extend({
     totpCode: z.string().length(6).optional(), // 2FA code
     code: z.string().length(6).optional(), // Email OTP code
-  }).strict().superRefine(({ totpCode, code }, ctx) => {
+  })
+  .strict()
+  .superRefine(({ totpCode, code }, ctx) => {
     // Nếu mà truyền cùng lúc totpCode và code thì sẽ add issue
     const message = 'Bạn chỉ nên truyền mã xác thực 2FA hoặc mã OTP. Không được truyền cả 2'
     if (totpCode !== undefined && code !== undefined) {
@@ -76,42 +73,47 @@ export const LoginBodySchema = UserSchema.pick({email: true, password: true}).ex
     }
   })
 
-export type LoginBodyTyoe = z.infer<typeof LoginBodySchema>
-
-
 export const LoginResSchema = z.object({
   accessToken: z.string(),
-  refreshToken: z.string()
+  refreshToken: z.string(),
 })
 
-
-export const RefreshTokenBodySchema = z.object({
-  refreshToken: z.string()
-}).strict()
+export const RefreshTokenBodySchema = z
+  .object({
+    refreshToken: z.string(),
+  })
+  .strict()
 
 export const RefreshTokenResSchema = LoginResSchema
-
-
 
 export const DeviceSchema = z.object({
   id: z.number(),
   userId: z.number(),
   userAgent: z.string(),
   ip: z.string(),
-  lastActive: z.coerce.date(),
-  createdAt:z.coerce.date(),
+  lastActive: z.string().datetime(),
+  createdAt: z.string().datetime(),
   isActive: z.boolean(),
 })
-
-
-
 
 export const RefreshTokenSchema = z.object({
   token: z.string(),
   userId: z.number(),
   deviceId: z.number(),
-  expiresAt: z.date(),
-  createdAt: z.date(),
+  expiresAt: z.string().datetime(),
+  createdAt: z.string().datetime(),
+})
+
+export const RoleSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  isActive: z.boolean(),
+  createdById: z.number().nullable(),
+  updatedById: z.number().nullable(),
+  deletedAt: z.string().datetime().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 })
 
 export const LogoutBodySchema = RefreshTokenBodySchema
@@ -127,7 +129,7 @@ export const GetAuthorizationUrlResSchema = z.object({
 
 export const ForgotPasswordBodySchema = z
   .object({
-    email: z.string().email(),
+    email: z.email(),
     code: z.string().length(6),
     newPassword: z.string().min(6).max(100),
     confirmNewPassword: z.string().min(6).max(100),
@@ -143,7 +145,7 @@ export const ForgotPasswordBodySchema = z
     }
   })
 
-  export const DisableTwoFactorBodySchema = z
+export const DisableTwoFactorBodySchema = z
   .object({
     totpCode: z.string().length(6).optional(),
     code: z.string().length(6).optional(),
@@ -168,8 +170,7 @@ export const ForgotPasswordBodySchema = z
 export const TwoFactorSetupResSchema = z.object({
   secret: z.string(),
   uri: z.string(),
-}).strict()
-
+})
 export type RegisterBodyType = z.infer<typeof RegisterBodySchema>
 export type RegisterResType = z.infer<typeof RegisterResSchema>
 export type VerificationCodeType = z.infer<typeof VerificationCodeSchema>

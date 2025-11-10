@@ -30,7 +30,7 @@ export class PermissionRepo {
             page: pagination.page,
             limit: pagination.limit,
             totalPages: Math.ceil(totalItems/ pagination.limit)
-        }
+        } as any
     }
 
 
@@ -40,7 +40,7 @@ export class PermissionRepo {
                 ...data,
                 createdById
             }
-        })
+        })as any
     }
 
     findById(id: number): Promise<PermissionType | null> {
@@ -49,7 +49,7 @@ export class PermissionRepo {
         id,
         deletedAt: null,
       },
-    })
+    })as any
   }
 
     update({
@@ -70,7 +70,7 @@ export class PermissionRepo {
         ...data,
         updatedById,
       },
-    })
+    })as any
   }
 
   delete(
@@ -83,7 +83,7 @@ export class PermissionRepo {
     },
     isHard?: boolean,
   ): Promise<PermissionType> {
-    return isHard
+    return (isHard
       ? this.prismaService.permission.delete({
           where: {
             id,
@@ -98,7 +98,7 @@ export class PermissionRepo {
             deletedAt: new Date(),
             deletedById,
           },
-        })
+        }))as any
   }
 
 

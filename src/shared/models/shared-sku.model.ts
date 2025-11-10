@@ -11,9 +11,9 @@ export const SKUSchema = z.object({
   createdById: z.number(),
   updatedById: z.number().nullable(),
   deletedById: z.number().nullable(),
-  deletedAt: z.date().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  deletedAt: z.string().datetime().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 })
 
 export type SKUSchemaType = z.infer<typeof SKUSchema>

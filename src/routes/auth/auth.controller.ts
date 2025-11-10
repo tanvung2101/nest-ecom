@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Ip, Post, Query, Res, SerializeOptions, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Ip, Post, Query, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ForgotPasswordBodyDTO, GetAuthorizationUrlResDTO, LoginBodyDTO, LoginResDTO, LogoutBodyDTO, RefreshTokenBodyDTO, RefreshTokenResDTO, RegisterBodyDTO, RegisterResDTO, SendOTPBodyDTO, TwoFactorSetupResDTO } from './auth.dto';
-import { ZodSerializerDto } from 'nestjs-zod';
+import { ZodResponse, ZodSerializerDto } from 'nestjs-zod';
 import { UserAgent } from 'src/shared/decorators/user-agent.decorator';
 import { MessageResDTO } from 'src/shared/dtos/response.dto';
 import { IsPublic } from 'src/shared/decorators/auth.decorator';
@@ -17,14 +17,14 @@ export class AuthController {
 
   @Post('register')
   @IsPublic()
-  @ZodSerializerDto(RegisterResDTO)
+  @ZodResponse({ type: RegisterResDTO })
   async register(@Body() body: RegisterBodyDTO) {
     return (await this.authService.register(body))
   }
 
   @Post('otp')
   @IsPublic()
-  // @ZodSerializerDto(MessageResDTO)
+  // @ZodResponse({ type: MessageResDTO })
   async sendOTP(@Body() body: SendOTPBodyDTO) {
     return (await this.authService.sendOTP(body))
   }
@@ -32,7 +32,7 @@ export class AuthController {
 
   @Post('login')
   @IsPublic()
-  @ZodSerializerDto(LoginResDTO)
+  @ZodResponse({ type: LoginResDTO })
   async login(@Body() body: LoginBodyDTO, @UserAgent() userAgent: string, @Ip() ip: string) {
     return (await this.authService.login({...body, userAgent, ip}))
   }
@@ -42,7 +42,7 @@ export class AuthController {
   @Post('refresh-token')
   @IsPublic()
   @HttpCode(HttpStatus.OK)
-  @ZodSerializerDto(RefreshTokenResDTO)
+  // @ZodResponse({ type: RefreshTokenResDTO })
   async refreshToken(@Body() body: RefreshTokenBodyDTO, @UserAgent() userAgent: string, @Ip() ip: string) {
     return await this.authService.refreshToken({
       refreshToken: body.refreshToken,
@@ -51,7 +51,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  @ZodSerializerDto(MessageResDTO)
+  @ZodResponse({ type: MessageResDTO })
   async logout(@Body() body: LogoutBodyDTO) {
     return await this.authService.logout(body.refreshToken)
   }
@@ -85,7 +85,7 @@ export class AuthController {
 
   @Post('forgot-password')
   @IsPublic()
-  @ZodSerializerDto(MessageResDTO)
+  @ZodResponse({ type: MessageResDTO })
   forgotPassword(@Body() body: ForgotPasswordBodyDTO){
     return this.authService.forgotPassword(body)
   }

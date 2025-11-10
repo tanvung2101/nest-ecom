@@ -33,7 +33,7 @@ export class RoleRepo {
       page: pagination.page,
       limit: pagination.limit,
       totalPages: Math.ceil(totalItems / pagination.limit),
-    }
+    } as any
   }
 
   findById(id: number): Promise<RoleWithPermissionsType | null> {
@@ -49,7 +49,7 @@ export class RoleRepo {
           },
         },
       },
-    })
+    }) as any
   }
 
   create({ createdById, data }: { createdById: number | null; data: CreateRoleBodyType }): Promise<RoleType> {
@@ -58,11 +58,11 @@ export class RoleRepo {
         ...data,
         createdById,
       },
-    })
+    }) as any
   }
 
   async update({ id, updatedById, data }: { id: number, updatedById: number, data: UpdateRoleBodyType }): Promise<RoleType> {
-     // Kiểm tra nếu có bất cứ permissionId nào mà đã soft delete thì không cho phép cập nhật
+    // Kiểm tra nếu có bất cứ permissionId nào mà đã soft delete thì không cho phép cập nhật
     if (data.permissionIds.length > 0) {
       const permissions = await this.prismaService.permission.findMany({
         where: {
@@ -97,7 +97,7 @@ export class RoleRepo {
           },
         },
       }
-    })
+    }) as any
   }
 
 
@@ -111,7 +111,7 @@ export class RoleRepo {
     },
     isHard?: boolean,
   ): Promise<RoleType> {
-    return isHard
+    return (isHard
       ? this.prismaService.role.delete({
         where: {
           id,
@@ -126,7 +126,7 @@ export class RoleRepo {
           deletedAt: new Date(),
           deletedById,
         },
-      })
+      })) as any
   }
 
 

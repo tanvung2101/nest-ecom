@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
-import { ZodSerializerDto } from 'nestjs-zod'
+import { ApiBearerAuth } from '@nestjs/swagger'
+import { ZodResponse } from 'nestjs-zod'
 import {
   CreateUserBodyDTO,
   CreateUserResDTO,
@@ -15,11 +16,12 @@ import { MessageResDTO } from 'src/shared/dtos/response.dto'
 import { GetUserProfileResDTO, UpdateProfileResDTO } from 'src/shared/dtos/shared-user.dto'
 
 @Controller('users')
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ZodSerializerDto(GetUsersResDTO)
+  @ZodResponse({ type: GetUsersResDTO })
   list(@Query() query: GetUsersQueryDTO) {
     return this.userService.list({
       page: query.page,
@@ -28,13 +30,13 @@ export class UserController {
   }
 
   @Get(':userId')
-  @ZodSerializerDto(GetUserProfileResDTO)
+  @ZodResponse({ type: GetUserProfileResDTO })
   findById(@Param() params: GetUserParamsDTO) {
     return this.userService.findById(params.userId)
   }
 
   @Post()
-  @ZodSerializerDto(CreateUserResDTO)
+  @ZodResponse({ type: CreateUserResDTO })
   create(
     @Body() body: CreateUserBodyDTO,
     @ActiveUser('userId') userId: number,
@@ -48,7 +50,7 @@ export class UserController {
   }
 
   @Put(':userId')
-  @ZodSerializerDto(UpdateProfileResDTO)
+  // @ZodResponse({ type: UpdateProfileResDTO })
   update(
     @Body() body: UpdateUserBodyDTO,
     @Param() params: GetUserParamsDTO,
@@ -64,7 +66,7 @@ export class UserController {
   }
 
   @Delete(':userId')
-  @ZodSerializerDto(MessageResDTO)
+  @ZodResponse({ type: MessageResDTO })
   delete(
     @Param() params: GetUserParamsDTO,
     @ActiveUser('userId') userId: number,

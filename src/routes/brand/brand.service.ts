@@ -35,7 +35,7 @@ export class BrandService {
             const brand = await this.brandRepo.update({
                 id, updatedById, data
             })
-            return
+            return brand
         } catch (error) {
             //         if (isNotFoundPrismaError(error)) {
             //     throw NotFoundRecordException

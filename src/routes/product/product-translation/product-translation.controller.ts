@@ -1,27 +1,27 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
-import { ZodSerializerDto } from 'nestjs-zod'
+import { ZodResponse } from 'nestjs-zod'
 import {
   CreateProductTranslationBodyDTO,
   GetProductTranslationDetailResDTO,
   GetProductTranslationParamsDTO,
   UpdateProductTranslationBodyDTO,
 } from 'src/routes/product/product-translation/product-translation.dto'
+import { ProductTranslationService } from 'src/routes/product/product-translation/product-translation.service'
 import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 import { MessageResDTO } from 'src/shared/dtos/response.dto'
-import { ProductTranslationService } from './product-translation.service'
 
 @Controller('product-translations')
 export class ProductTranslationController {
   constructor(private readonly productTranslationService: ProductTranslationService) {}
 
   @Get(':productTranslationId')
-  @ZodSerializerDto(GetProductTranslationDetailResDTO)
+  @ZodResponse({ type: GetProductTranslationDetailResDTO })
   findById(@Param() params: GetProductTranslationParamsDTO) {
     return this.productTranslationService.findById(params.productTranslationId)
   }
 
   @Post()
-  @ZodSerializerDto(GetProductTranslationDetailResDTO)
+  @ZodResponse({ type: GetProductTranslationDetailResDTO })
   create(@Body() body: CreateProductTranslationBodyDTO, @ActiveUser('userId') userId: number) {
     return this.productTranslationService.create({
       data: body,
@@ -30,7 +30,7 @@ export class ProductTranslationController {
   }
 
   @Put(':productTranslationId')
-  @ZodSerializerDto(GetProductTranslationDetailResDTO)
+  @ZodResponse({ type: GetProductTranslationDetailResDTO })
   update(
     @Body() body: UpdateProductTranslationBodyDTO,
     @Param() params: GetProductTranslationParamsDTO,
@@ -44,7 +44,7 @@ export class ProductTranslationController {
   }
 
   @Delete(':productTranslationId')
-  @ZodSerializerDto(MessageResDTO)
+  @ZodResponse({ type: MessageResDTO })
   delete(@Param() params: GetProductTranslationParamsDTO, @ActiveUser('userId') userId: number) {
     return this.productTranslationService.delete({
       id: params.productTranslationId,

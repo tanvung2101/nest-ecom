@@ -15,7 +15,7 @@ export class MediaService {
             contentType: file.mimetype,
           })
           .then((res) => {
-            return { url: res.Location }
+            return { url: String(res.Location) }
           })
       }),
     )

@@ -28,7 +28,7 @@ async function bootstrap() {
             path,
             method,
             name: method + ' ' + path,
-            module: moduleName,
+            moduleName: name,
           }
         }
       })

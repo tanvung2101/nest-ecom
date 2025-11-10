@@ -40,7 +40,7 @@ export class BrandRepo {
             page: pagination.page,
             limit: pagination.limit,
             totalPages: Math.ceil(totalItems / pagination.limit),
-        }
+        } as any
     }
 
     findById(id: number, languageId: string): Promise<BrandIncludeTranslationType | null> {
@@ -54,7 +54,7 @@ export class BrandRepo {
                     where: languageId === ALL_LANGUAGE_CODE ? { deletedAt: null } : { deletedAt: null, languageId },
                 },
             }
-        })
+        })as any
     }
 
     create({ createdById, data }: { createdById: number | null, data: CreateBrandBodyType }): Promise<BrandIncludeTranslationType> {
@@ -68,7 +68,7 @@ export class BrandRepo {
                     where: { deletedAt: null }
                 }
             }
-        })
+        })as any
     }
 
 
@@ -85,7 +85,7 @@ export class BrandRepo {
             include: {
                 brandTranslations: { where: { deletedAt: null } }
             }
-        })
+        })as any
     }
 
     delete(
@@ -98,7 +98,7 @@ export class BrandRepo {
     },
     isHard?: boolean,
   ): Promise<BrandType> {
-    return isHard
+    return (isHard
       ? this.prismaService.brand.delete({
           where: {
             id,
@@ -113,7 +113,7 @@ export class BrandRepo {
             deletedAt: new Date(),
             deletedById,
           },
-        })
+        }))as any
   }
 
 

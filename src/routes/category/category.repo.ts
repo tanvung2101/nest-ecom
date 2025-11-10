@@ -26,7 +26,7 @@ export class CategoryRepo {
         return {
             data: categories,
             totalItems: categories.length
-        }
+        }as any
     }
 
 
@@ -41,7 +41,7 @@ export class CategoryRepo {
                     where: languageId === ALL_LANGUAGE_CODE ? { deletedAt: null } : { deletedAt: null, languageId },
                 },
             },
-        })
+        })as any
     }
 
     create({createdById, data}: {createdById: number| null, data:CreateCategoryBodyType}):Promise<CategoryIncludeTranslationType>{
@@ -57,7 +57,7 @@ export class CategoryRepo {
                     }
                 }
             }
-        })
+        })as any
     }
 
     async update({
@@ -83,7 +83,7 @@ export class CategoryRepo {
           where: { deletedAt: null },
         },
       },
-    })
+    })as any
   }
 
   delete(
@@ -96,7 +96,7 @@ export class CategoryRepo {
     },
     isHard?: boolean,
   ): Promise<CategoryType> {
-    return isHard
+    return (isHard
       ? this.prismaService.category.delete({
           where: {
             id,
@@ -111,7 +111,7 @@ export class CategoryRepo {
             deletedAt: new Date(),
             deletedById,
           },
-        })
+        }))as any
   }
 
 

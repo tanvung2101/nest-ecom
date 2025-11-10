@@ -1,8 +1,6 @@
-import { OrderStatus } from "src/shared/constants/order.constant";
-import { PaginationQuerySchema } from "src/shared/models/request.model";
-import { OrderSchema, OrderStatusSchema } from "src/shared/models/shared-order.model";
-import z from "zod";
-
+import { PaginationQuerySchema } from 'src/shared/models/request.model'
+import { OrderSchema, OrderStatusSchema } from 'src/shared/models/shared-order.model'
+import { z } from 'zod'
 
 export const ProductSKUSnapshotSchema = z.object({
   id: z.number(),
@@ -23,7 +21,7 @@ export const ProductSKUSnapshotSchema = z.object({
   orderId: z.number().nullable(),
   quantity: z.number(),
 
-  createdAt: z.date(),
+  createdAt: z.string().datetime(),
 })
 
 export const GetOrderListResSchema = z.object({
@@ -66,12 +64,9 @@ export const CreateOrderBodySchema = z
   )
   .min(1)
 
-export const CreateOrderResSchema = z.object({ data: z.array(OrderSchema) })
-
-export const CancelOrderResSchema = OrderSchema
-
-
+export const CreateOrderResSchema = z.object({ orders: z.array(OrderSchema), paymentId: z.number() })
 export const CancelOrderBodySchema = z.object({})
+export const CancelOrderResSchema = OrderSchema
 
 export const GetOrderParamsSchema = z
   .object({

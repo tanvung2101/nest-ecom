@@ -1,34 +1,34 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
-import { ZodSerializerDto } from 'nestjs-zod'
+import { Controller, Get, Param, Query } from '@nestjs/common'
+import { ZodResponse } from 'nestjs-zod'
 import {
-  CreateProductBodyDTO,
   GetProductDetailResDTO,
   GetProductParamsDTO,
   GetProductsQueryDTO,
   GetProductsResDTO,
-  ProductDTO,
-  UpdateProductBodyDTO,
 } from 'src/routes/product/product.dto'
 import { ProductService } from 'src/routes/product/product.service'
-import { ActiveUser } from 'src/shared/decorators/active-user.decorator'
 import { IsPublic } from 'src/shared/decorators/auth.decorator'
-import { PaginationQueryDTO } from 'src/shared/dtos/request.dto'
-import { MessageResDTO } from 'src/shared/dtos/response.dto'
 
+// @SkipThrottle()
 @Controller('products')
 @IsPublic()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  @ZodSerializerDto(GetProductsResDTO)
+  @ZodResponse({ type: GetProductsResDTO })
   list(@Query() query: GetProductsQueryDTO) {
-    return this.productService.list({query})
+    return this.productService.list({
+      query,
+    })
   }
 
+  // @SkipThrottle({ default: false })
   @Get(':productId')
-  @ZodSerializerDto(GetProductDetailResDTO)
+  @ZodResponse({ type: GetProductDetailResDTO })
   findById(@Param() params: GetProductParamsDTO) {
-    return this.productService.getDetail({productId: params.productId})
+    return this.productService.getDetail({
+      productId: params.productId,
+    })
   }
 }

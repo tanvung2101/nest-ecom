@@ -46,10 +46,10 @@ export class OrderRepo {
             limit,
             totalItems,
             totalPages: Math.ceil(totalItems / limit),
-        }
+        } as any
     }
 
-    async create(userId: number, body: CreateOrderBodyType): Promise<{paymentId: number, orders:CreateOrderResType['data']}> {
+    async create(userId: number, body: CreateOrderBodyType): Promise<{paymentId: number, orders:CreateOrderResType['orders']}> {
         // 1. Kiểm tra xem tất cả cartItemIds có tồn tại trong cơ sở dữ liệu hay không
         // 2. Kiểm tra số lượng mua có lớn hơn số lượng tồn kho hay không
         // 3. Kiểm tra xem tất cả sản phẩm mua có sản phẩm nào bị xóa hay ẩn không
@@ -196,7 +196,7 @@ export class OrderRepo {
         return {
             paymentId,
             orders,
-        }
+        } as any
     }
 
     async detail(userId: number, orderId: number): Promise<GetOrderDetailResType> {
@@ -209,12 +209,12 @@ export class OrderRepo {
             include: {
                 items: true
             }
-        })
+        }) 
 
         if (!order) {
             throw OrderNotFoundException
         }
-        return order
+        return order as any
     }
 
 
@@ -244,7 +244,7 @@ export class OrderRepo {
                 }
             })
 
-            return updatedOrder
+            return updatedOrder as any
         } catch (error) {
             // if (isNotFoundPrismaError(error)) {
             //     throw OrderNotFoundException
