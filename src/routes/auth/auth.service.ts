@@ -102,14 +102,15 @@ export class AuthService {
     })
 
     // 3. Gửi mã OTP
-    // const { error } = await this.emailService.sendOTP({
-    //   email: body.email,
-    //   code,
-    // })
-    // if (error) {
-    //   throw FailedToSendOTPException
-    // }
-    return verificationCode
+    const { error } = await this.emailService.sendOTP({
+      email: body.email,
+      code,
+    })
+    if (error) {
+      throw FailedToSendOTPException
+    }
+    // return verificationCode
+    return { message: 'Gửi mã OTP thành công' }
   }
 
   async login(body: LoginBodyType & { userAgent: string; ip: string }) {

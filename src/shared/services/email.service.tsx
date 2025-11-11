@@ -3,6 +3,7 @@ import { Resend } from 'resend'
 import envConfig from 'src/shared/config'
 import * as React from 'react'
 import { OTPEmail } from 'emails/otp'
+import { render } from '@react-email/render'
 
 @Injectable()
 export class EmailService {
@@ -13,12 +14,13 @@ export class EmailService {
 
   async sendOTP(payload: { email: string; code: string }) {
     const subject = 'Mã OTP'
+    const html = await render(<OTPEmail otpCode={payload.code} title={subject}/>)
     return this.resend.emails.send({
       from: 'Ecommerce <onboarding@resend.dev>',
       to: [payload.email],
       subject: 'Mã OTP',
-      react: <OTPEmail otpCode={payload.code} title={subject} />,
-      // html: `<strong>${payload.code}</strong>`,
+      // react: <OTPEmail otpCode={payload.code} title={subject} />,
+      html,
     })
   }
 }
