@@ -9,9 +9,14 @@ async function bootstrap() {
   app.enableCors()
   // patchNestJsSwagger()
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
+    .setTitle('Nest example')
     .setDescription('The cats API description')
-    .setVersion('1.0')
+    .setVersion('1.0').addBearerAuth().addApiKey({
+      name: 'authorization',
+      type: 'apiKey',
+      in: 'headers'
+      
+    }, 'payment-api-key')
     .build();
   const documentFactory = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, cleanupOpenApiDoc(documentFactory), {

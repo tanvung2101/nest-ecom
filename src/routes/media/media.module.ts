@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
   },
 })
 @Module({
-  providers: [ CloudinaryService, CloudinaryProvider],
+  providers: [ CloudinaryService, CloudinaryProvider, MediaService],
   imports: [
     MulterModule.register({
       storage,

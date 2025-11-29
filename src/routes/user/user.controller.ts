@@ -17,6 +17,7 @@ import { GetUserProfileResDTO, UpdateProfileResDTO } from 'src/shared/dtos/share
 
 @Controller('users')
 @ApiBearerAuth()
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
