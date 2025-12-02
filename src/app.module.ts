@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { SharedModule } from './shared/shared.module'
-import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod'
 import CustomZodValidationPipe from './shared/pipes/custom-zod-validation.pipe'
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter'
@@ -25,6 +25,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { PaymentConsumer } from './queues/payment.consumer'
 import { WebsocketModule } from './websockets/websocket.module'
 import { ProfileModule } from './routes/profile/profile.module'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ThrottlerBehindProxyGuard } from './shared/guards/throttler-behind-proxy.guard'
 
 @Module({
   imports: [
@@ -33,22 +35,31 @@ import { ProfileModule } from './routes/profile/profile.module'
         host: 'redis-10839.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',
         port: 10839,
         username: 'default',
-    password: 'A8ENqUXhfUfWs1ULZEYW5RG7uQb2VGse',
+        password: 'A8ENqUXhfUfWs1ULZEYW5RG7uQb2VGse',
       },
     }),
     I18nModule.forRoot({
-    fallbackLanguage: 'en',
-    loaderOptions: {
-      path: path.resolve('src/i18n/'),
-      watch: true,
-    },
-    resolvers: [
-      { use: QueryResolver, options: ['lang'] },
-      AcceptLanguageResolver,
-    ],
-    typesOutputPath: path.resolve('src/generated/i18n.generated.ts'),
-  }), SharedModule, AuthModule, LanguageModule, PermissionModule, RoleModule, MediaModule, BrandModule, BrandTranslationModule, CategoryTranslationModule, CategoryModule,
-    ProductModule, ProductTranslationModule,CartModule,OrderModule,WebsocketModule,ProfileModule
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: path.resolve('src/i18n/'),
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+      ],
+      typesOutputPath: path.resolve('src/generated/i18n.generated.ts'),
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
+    }),
+    SharedModule, AuthModule, LanguageModule, PermissionModule, RoleModule, MediaModule, BrandModule, BrandTranslationModule, CategoryTranslationModule, CategoryModule,
+    ProductModule, ProductTranslationModule, CartModule, OrderModule, WebsocketModule, ProfileModule
   ],
   controllers: [AppController],
   providers: [
@@ -61,6 +72,11 @@ import { ProfileModule } from './routes/profile/profile.module'
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerBehindProxyGuard
     },
     PaymentConsumer
   ],

@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { WebsocketAdapter } from './websockets/websocket.adapter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { cleanupOpenApiDoc } from 'nestjs-zod'
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.set('trust proxy', 'loopback'); // Trust requests from the loopback address
   app.enableCors()
   // patchNestJsSwagger()
   const config = new DocumentBuilder()

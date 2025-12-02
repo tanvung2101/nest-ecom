@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common'
+import { SkipThrottle } from '@nestjs/throttler'
 import { ZodResponse } from 'nestjs-zod'
 import {
   GetProductDetailResDTO,
@@ -9,7 +10,7 @@ import {
 import { ProductService } from 'src/routes/product/product.service'
 import { IsPublic } from 'src/shared/decorators/auth.decorator'
 
-// @SkipThrottle()
+@SkipThrottle()
 @Controller('products')
 @IsPublic()
 export class ProductController {
@@ -23,7 +24,7 @@ export class ProductController {
     })
   }
 
-  // @SkipThrottle({ default: false })
+  @SkipThrottle({ default: false })
   @Get(':productId')
   @ZodResponse({ type: GetProductDetailResDTO })
   findById(@Param() params: GetProductParamsDTO) {
