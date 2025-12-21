@@ -10,12 +10,12 @@ import ms from 'ms'
 import envConfig from 'src/shared/config';
 import { TypeOfVerificationCode, TypeOfVerificationCodeType } from 'src/shared/constants/auth.constant';
 import { EmailService } from 'src/shared/services/email.service';
-import { LoginBodyDTO } from './auth.dto';
 import { AccessTokenPayloadCreate } from 'src/shared/types/jwt.type';
 import { TokenService } from 'src/shared/services/token.service';
-import { EmailAlreadyExistsException, EmailNotFoundException, FailedToSendOTPException, InvalidOTPException, InvalidPasswordException, InvalidTOTPAndCodeException, InvalidTOTPException, OTPExpiredException, RefreshTokenAlreadyUsedException, TOTPAlreadyEnabledException, TOTPNotEnabledException, UnauthorizedAccessException } from './error.model';
+import { EmailAlreadyExistsException, EmailNotFoundException, FailedToSendOTPException, InvalidPasswordException, InvalidTOTPAndCodeException, InvalidTOTPException, OTPExpiredException, RefreshTokenAlreadyUsedException, TOTPAlreadyEnabledException, TOTPNotEnabledException, UnauthorizedAccessException } from './error.model';
 import { TwoFactorService } from 'src/shared/services/2fa.service';
 import { SharedRoleRepository } from 'src/shared/repositories/shared-role.repo';
+import { InvalidOTPException } from './auth.error';
 
 
 @Injectable()
@@ -44,7 +44,7 @@ export class AuthService {
         email, code,type
       }
     })
-    if (!vevificationCode) {
+    if (!vevificationCode || vevificationCode.code !== code) {
       throw InvalidOTPException
     }
     if (new Date(vevificationCode.expiresAt) < new Date()) {
