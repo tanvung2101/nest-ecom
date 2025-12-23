@@ -8,7 +8,8 @@ import { EmailService } from "src/shared/services/email.service"
 import { TwoFactorService } from "src/shared/services/2fa.service"
 import { TypeOfVerificationCode } from "src/shared/constants/auth.constant"
 import { HashingService } from "src/shared/services/hashing.service"
-import { InvalidOTPException, OTPExpiredException } from "./auth.error"
+import { EmailAlreadyExistsException, InvalidOTPException, OTPExpiredException } from "./auth.error"
+import { Prisma } from "@prisma/client"
 
 describe('AuthService', () => {
     let authService: AuthService
@@ -92,6 +93,10 @@ describe('AuthService', () => {
         authService = modele.get<AuthService>(AuthService)
     })
 
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
     describe('validateVerificationCode', () => {
         it('xác thực mã xác minh thành công', async () => {
             const mockVerificationCode = {
@@ -163,6 +168,88 @@ describe('AuthService', () => {
         )
 
     })
+
+    describe('register', () => {
+        it('should register a new user successfully', async () => {
+            jest.spyOn(authService, 'validateVerificationCode').mockResolvedValue(null as any)
+            const registerData = {
+                email: 'test@example.com',
+                password: 'password123',
+                name: 'Test User',
+                phoneNumber: '0123456789',
+                confirmPassword: 'password123',
+                code: '123456'
+            }
+            const mockUser = {
+                id: 1,
+                email: registerData.email,
+                name: registerData.name,
+                phoneNumber: registerData.phoneNumber,
+                password: registerData.password,
+                roleId: 1,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            }
+
+            mockSharedRoleRepository.getClientRoleId.mockResolvedValue(1)
+            mockHashingService.hash.mockResolvedValue('hashedPassword')
+            mockAuthRepository.createUser.mockResolvedValue(mockUser),
+                mockAuthRepository.deleteVerificationCode.mockResolvedValue(null)
+            const result = await authService.register(registerData)
+            expect(result).toEqual(mockUser)
+            expect(mockHashingService.hash).toHaveBeenCalledWith(registerData.password)
+            expect(mockAuthRepository.createUser).toHaveBeenCalled()
+            expect(mockAuthRepository.deleteVerificationCode).toHaveBeenCalled()
+        })
+
+        it('should throw EmailAlreadyExistsException when email already exists', async () => {
+            jest.spyOn(authService, 'validateVerificationCode').mockResolvedValue(null as any)
+            const registerData = {
+                email: 'test@example.com',
+                password: 'password123',
+                name: 'Test User',
+                phoneNumber: '0123456789',
+                confirmPassword: 'password123',
+                code: '123456'
+            }
+
+            mockSharedRoleRepository.getClientRoleId.mockResolvedValue(1)
+            mockHashingService.hash.mockResolvedValue('hashedPassword')
+            const error = new Prisma.PrismaClientKnownRequestError('Unique constraint', {
+                code: 'P2002',
+                clientVersion: '6.0.0'
+            })
+
+            mockAuthRepository.createUser.mockRejectedValue(error)
+            mockAuthRepository.deleteVerificationCode.mockResolvedValue(null)
+            await expect(authService.register(registerData)).rejects.toStrictEqual(EmailAlreadyExistsException)
+        })
+
+        it('should throw Error when validation fails', async () => {
+            jest.spyOn(authService, 'validateVerificationCode').mockRejectedValue(null)
+
+            const registerData = {
+                email: 'test@example.com',
+                password: 'password123',
+                name: 'Test User',
+                phoneNumber: '0123456789',
+                confirmPassword: 'password123',
+                code: '123456',
+            }
+
+            await expect(authService.register(registerData)).rejects.toBeDefined()
+
+            
+            
+            expect(mockSharedRoleRepository.getClientRoleId).not.toHaveBeenCalled()
+            expect(mockHashingService.hash).not.toHaveBeenCalled()
+            expect(mockAuthRepository.createUser).not.toHaveBeenCalled()
+            expect(mockAuthRepository.deleteVerificationCode).not.toHaveBeenCalled()
+        })
+
+    })
+
+
 
 
 })

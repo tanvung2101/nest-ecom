@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/await-thenable */
-import { HttpException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HashingService } from 'src/shared/services/hashing.service';
 import { DisableTwoFactorBodyType, ForgotPasswordBodyType, LoginBodyType, RefreshTokenBodyType, RegisterBodyType, SendOTPBodyType } from './auth.model';
 import { AuthRepository } from './auth.repo';
@@ -16,6 +16,7 @@ import { EmailAlreadyExistsException, EmailNotFoundException, FailedToSendOTPExc
 import { TwoFactorService } from 'src/shared/services/2fa.service';
 import { SharedRoleRepository } from 'src/shared/repositories/shared-role.repo';
 import { InvalidOTPException } from './auth.error';
+import { Prisma } from '@prisma/client';
 
 
 @Injectable()
@@ -72,9 +73,9 @@ export class AuthService {
     ])
      return user
     } catch (error) {
-      // if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      //   throw new ConflictException('Email already exit')
-      // }
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw EmailAlreadyExistsException
+      }
       throw error
     }
   }
