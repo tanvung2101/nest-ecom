@@ -25,11 +25,13 @@ import { BullModule } from '@nestjs/bullmq';
 import { PaymentConsumer } from './queues/payment.consumer'
 import { WebsocketModule } from './websockets/websocket.module'
 import { ProfileModule } from './routes/profile/profile.module'
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ThrottlerModule } from '@nestjs/throttler'
+import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerBehindProxyGuard } from './shared/guards/throttler-behind-proxy.guard'
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     BullModule.forRoot({
       connection: {
         host: 'redis-10839.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',

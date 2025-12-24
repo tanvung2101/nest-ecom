@@ -16,7 +16,7 @@ export class S3Service {
       },
     })
     this.s3.listBuckets({}).then((res) => {
-      console.log(res)
+      // console.log(res)
     })
   }
   uploadedFile({ filename, filepath, contentType }: { filename: string; filepath: string; contentType: string }) {
