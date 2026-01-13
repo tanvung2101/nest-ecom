@@ -2,8 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../services/prisma.service";
 import { OrderStatus } from "../constants/order.constant";
 import { PaymentStatus } from "../constants/payment.constant";
+import { SerializeAll } from "../decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class SharedPaymentRepository {
     constructor(private readonly prismaService: PrismaService) { }
 

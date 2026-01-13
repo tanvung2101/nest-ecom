@@ -3,8 +3,10 @@ import { InvalidPasswordException, NotFoundRecordException } from "src/shared/er
 import { SharedUserRepository } from "src/shared/repositories/shared-user.repo";
 import { HashingService } from "src/shared/services/hashing.service";
 import { ChangePasswordBodyType, UpdateMeBodyType } from "./profile.model";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+// @SerializeAll()
 export class ProfileService {
     constructor(
     private readonly sharedUserRepository: SharedUserRepository,

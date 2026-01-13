@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../services/prisma.service";
+import { SerializeAll } from "../decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class SharedWebsocketRepository {
     constructor(private readonly prismaService:PrismaService){}
 
