@@ -3,16 +3,16 @@ import { z } from 'zod'
 
 export const CategorySchema = z.object({
   id: z.number(),
-  parentCategoryId: z.number().nullable(),
+  parentCategoryId: z.number().nullable().optional(),
   name: z.string(),
   logo: z.string().nullable(),
 
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
   deletedById: z.number().nullable(),
-  deletedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  deletedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export const CategoryIncludeTranslationSchema = CategorySchema.extend({

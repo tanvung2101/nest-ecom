@@ -6,8 +6,10 @@ import { AddToCartBodyType, CartItemDetailType, CartItemType, DeleteCartBodyType
 import { ALL_LANGUAGE_CODE } from "src/shared/constants/other.constant";
 import { UpdateBrandBodyType } from "../brand/brand.model";
 import { Prisma } from "@prisma/client";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class CartRepo {
     constructor(private readonly prismaService: PrismaService) { }
 

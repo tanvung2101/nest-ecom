@@ -8,8 +8,10 @@ import { PREFIX_PAYMENT_CODE } from "src/shared/constants/other.constant";
 import { PaymentStatus } from "src/shared/constants/payment.constant";
 import { OrderStatus } from "src/shared/constants/order.constant";
 import { PaymentProducer } from "./payment.producer";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class PaymentRepo {
     constructor(private readonly prismaService: PrismaService, private readonly paymentProducer: PaymentProducer) { }
 

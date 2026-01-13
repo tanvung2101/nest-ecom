@@ -3,8 +3,10 @@ import { PaginationQueryType } from "src/shared/models/request.model";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { CreateReviewBodyType, CreateReviewResType, GetReviewsType, UpdateReviewBodyType, UpdateReviewResType } from "./review.model";
 import { OrderStatus } from "src/shared/constants/order.constant";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class ReviewRepository {
     constructor(private readonly prismaService: PrismaService) { }
 
@@ -46,8 +48,8 @@ export class ReviewRepository {
             page: pagination.page,
             limit: pagination.limit,
             totalPages: Math.ceil(totalItems / pagination.limit)
-        }
-    }
+        } as any
+    } 
 
 
     private async validateOrder({ orderId, userId }: { orderId: number, userId: number }) {
@@ -179,6 +181,6 @@ export class ReviewRepository {
                 ...review,
                 medias: reviewMedias
             }
-        })
+        }) as any
     }
 }

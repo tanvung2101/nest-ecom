@@ -3,8 +3,10 @@ import { CreateProductBodyType, GetProductDetailResType, GetProductsResType, Pro
 import { ALL_LANGUAGE_CODE, OrderBy, OrderByType, SortBy, SortByType } from 'src/shared/constants/other.constant'
 import { PrismaService } from 'src/shared/services/prisma.service'
 import { Prisma } from '@prisma/client'
+import { SerializeAll } from 'src/shared/decorators/serialize.decorator'
 
 @Injectable()
+@SerializeAll()
 export class ProductRepo {
   constructor(private readonly prismaService: PrismaService) { }
 
@@ -188,6 +190,7 @@ export class ProductRepo {
     data: CreateProductBodyType
   }): Promise<GetProductDetailResType> {
     const { skus, categories, ...productData } = data
+    console.log(data)
     return this.prismaService.product.create({
       data: {
         createdById,

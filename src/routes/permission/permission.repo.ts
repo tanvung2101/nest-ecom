@@ -1,8 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { CreatePermissionBodyType, GetPermissionsQueryType, GetPermissionsResType, PermissionType, UpdatePermissionBodyType } from "./permission.model";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class PermissionRepo {
     constructor(private prismaService:PrismaService){}
 

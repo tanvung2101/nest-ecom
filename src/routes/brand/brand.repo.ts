@@ -3,8 +3,10 @@ import { PaginationQueryType } from "src/shared/models/request.model";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { BrandIncludeTranslationType, BrandType, CreateBrandBodyType, GetBrandDetailResType, GetBrandsResType, UpdateBrandBodyType } from "./brand.model";
 import { ALL_LANGUAGE_CODE } from "src/shared/constants/other.constant";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class BrandRepo {
     constructor(private prismaService: PrismaService) { }
 
@@ -68,7 +70,7 @@ export class BrandRepo {
                     where: { deletedAt: null }
                 }
             }
-        })as any
+        }) as any
     }
 
 

@@ -25,9 +25,9 @@ export const OrderSchema = z.object({
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
   deletedById: z.number().nullable(),
-  deletedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  deletedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export const ProductSKUSnapshotSchema = z.object({
@@ -49,7 +49,7 @@ export const ProductSKUSnapshotSchema = z.object({
   orderId: z.number().nullable(),
   quantity: z.number(),
 
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export const OrderIncludeProductSKUSnapshotSchema = OrderSchema.extend({

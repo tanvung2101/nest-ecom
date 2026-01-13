@@ -95,7 +95,7 @@ export class AuthService {
     // 2. Tạo mã OTP
 
     const code = generateOTP()
-    const verificationCode = await this.authRepository.createVerificationCode({
+    await this.authRepository.createVerificationCode({
       email: body.email,
       type: body.type,
       code,

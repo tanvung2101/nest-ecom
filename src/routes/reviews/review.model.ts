@@ -7,7 +7,7 @@ export const ReviewMediaSchema = z.object({
     url: z.string().max(1000),
     type: z.enum([MediaType.IMAGE, MediaType.VIDEO]),
     reviewId: z.number().int(),
-    createdAt: z.date()
+    createdAt: z.iso.datetime()
 })
 
 export const ReviewSchema = z.object({
@@ -17,8 +17,8 @@ export const ReviewSchema = z.object({
     orderId: z.number().int(),
     productId: z.number().int(),
     updateCount: z.number().int(),
-    createdAt: z.date(),
-    updatedAt: z.date()
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime()
 })
 
 export const CreateReviewBodySchema = ReviewSchema.pick({

@@ -2,8 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { CategoryIncludeTranslationType, CategoryType, CreateCategoryBodyType, GetAllCategoriesResType, UpdateCategoryBodyType } from "./category.model";
 import { ALL_LANGUAGE_CODE } from "src/shared/constants/other.constant";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class CategoryRepo {
     constructor(private prismaService: PrismaService) { }
 

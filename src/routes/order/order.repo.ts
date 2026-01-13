@@ -7,8 +7,10 @@ import { CannotCancelOrderException, NotFoundCartItemException, OrderNotFoundExc
 import { OrderStatus } from "src/shared/constants/order.constant";
 import { PaymentStatus } from "src/shared/constants/payment.constant";
 import { OrderProducer } from "./order.producer";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class OrderRepo {
     constructor(private readonly prismaService: PrismaService,private orderProducer: OrderProducer) { }
 

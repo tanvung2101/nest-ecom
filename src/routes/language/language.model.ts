@@ -5,9 +5,9 @@ export const LanguageSchema = z.object({
   name: z.string().max(500),
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
-  deletedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  deletedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export const GetLanguagesResSchema = z.object({

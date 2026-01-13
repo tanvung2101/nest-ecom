@@ -5,9 +5,11 @@ import {
   CategoryTranslationType,
   UpdateCategoryTranslationBodyType,
 } from 'src/routes/category/category-translation/category-translation.model'
+import { SerializeAll } from 'src/shared/decorators/serialize.decorator'
 import { PrismaService } from 'src/shared/services/prisma.service'
 
 @Injectable()
+@SerializeAll()
 export class CategoryTranslationRepo {
   constructor(private prismaService: PrismaService) {}
 

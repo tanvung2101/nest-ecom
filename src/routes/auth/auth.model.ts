@@ -38,8 +38,8 @@ export const VerificationCodeSchema = z.object({
     TypeOfVerificationCode.LOGIN,
     TypeOfVerificationCode.DISABLE_2FA,
   ]),
-  expiresAt: z.string().datetime(),
-  createdAt: z.string().datetime(),
+  expiresAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export const SendOTPBodySchema = VerificationCodeSchema.pick({
@@ -91,8 +91,8 @@ export const DeviceSchema = z.object({
   userId: z.number(),
   userAgent: z.string(),
   ip: z.string(),
-  lastActive: z.string().datetime(),
-  createdAt: z.string().datetime(),
+  lastActive: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
   isActive: z.boolean(),
 })
 
@@ -100,8 +100,8 @@ export const RefreshTokenSchema = z.object({
   token: z.string(),
   userId: z.number(),
   deviceId: z.number(),
-  expiresAt: z.string().datetime(),
-  createdAt: z.string().datetime(),
+  expiresAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export const RoleSchema = z.object({
@@ -111,9 +111,9 @@ export const RoleSchema = z.object({
   isActive: z.boolean(),
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
-  deletedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  deletedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export const LogoutBodySchema = RefreshTokenBodySchema

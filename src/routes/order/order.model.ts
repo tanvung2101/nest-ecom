@@ -21,7 +21,7 @@ export const ProductSKUSnapshotSchema = z.object({
   orderId: z.number().nullable(),
   quantity: z.number(),
 
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export const GetOrderListResSchema = z.object({

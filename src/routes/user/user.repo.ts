@@ -2,8 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { CreateUserBodyType, GetUsersQueryType, GetUsersResType } from "./user.model";
 import { UserType } from "src/shared/models/shared-user.model";
+import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
+@SerializeAll()
 export class UserRepo {
     constructor(private prismaService: PrismaService) { }
 

@@ -33,7 +33,7 @@ export const VariantsSchema = z.array(VariantSchema).superRefine((variants, ctx)
 
 export const ProductSchema = z.object({
   id: z.number(),
-  publishedAt: z.string().datetime().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
   name: z.string().trim().max(500),
   basePrice: z.number().min(0),
   virtualPrice: z.number().min(0),
@@ -44,9 +44,9 @@ export const ProductSchema = z.object({
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
   deletedById: z.number().nullable(),
-  deletedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  deletedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type ProductType = z.infer<typeof ProductSchema>
