@@ -1,14 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { InvalidPasswordException, NotFoundRecordException } from "src/shared/error";
-import { SharedUserRepository } from "src/shared/repositories/shared-user.repo";
-import { HashingService } from "src/shared/services/hashing.service";
-import { ChangePasswordBodyType, UpdateMeBodyType } from "./profile.model";
-import { SerializeAll } from "src/shared/decorators/serialize.decorator";
+import { Injectable } from '@nestjs/common'
+import { InvalidPasswordException, NotFoundRecordException } from 'src/shared/error'
+import { ChangePasswordBodyType, UpdateMeBodySchema, UpdateMeBodyType } from './profile.model'
+import { HashingService } from 'src/shared/services/hashing.service'
+import { SharedUserRepository } from 'src/shared/repositories/shared-user.repo'
+
 
 @Injectable()
-// @SerializeAll()
 export class ProfileService {
-    constructor(
+  constructor(
     private readonly sharedUserRepository: SharedUserRepository,
     private readonly hashingService: HashingService,
   ) {}
@@ -35,9 +34,9 @@ export class ProfileService {
         },
       )
     } catch (error) {
-    //   if (isUniqueConstraintPrismaError(error)) {
-    //     throw NotFoundRecordException
-    //   }
+      // if (isUniqueConstraintPrismaError(error)) {
+      //   throw NotFoundRecordException
+      // }
       throw error
     }
   }
@@ -58,7 +57,7 @@ export class ProfileService {
       const hashedPassword = await this.hashingService.hash(newPassword)
 
       await this.sharedUserRepository.update(
-        { id: userId},
+        { id: userId },
         {
           password: hashedPassword,
           updatedById: userId,
@@ -68,12 +67,10 @@ export class ProfileService {
         message: 'Password changed successfully',
       }
     } catch (error) {
-    //   if (isUniqueConstraintPrismaError(error)) {
-    //     throw NotFoundRecordException
-    //   }
+      // if (isUniqueConstraintPrismaError(error)) {
+      //   throw NotFoundRecordException
+      // }
       throw error
     }
   }
-
-
 }

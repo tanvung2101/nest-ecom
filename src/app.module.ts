@@ -28,6 +28,7 @@ import { ProfileModule } from './routes/profile/profile.module'
 import { ThrottlerModule } from '@nestjs/throttler'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerBehindProxyGuard } from './shared/guards/throttler-behind-proxy.guard'
+import { PaymentModule } from './routes/payment/payment.module'
 
 @Module({
   imports: [
@@ -61,7 +62,7 @@ import { ThrottlerBehindProxyGuard } from './shared/guards/throttler-behind-prox
       ],
     }),
     SharedModule, AuthModule, LanguageModule, PermissionModule, RoleModule, MediaModule, BrandModule, BrandTranslationModule, CategoryTranslationModule, CategoryModule,
-    ProductModule, ProductTranslationModule, CartModule, OrderModule, WebsocketModule, ProfileModule
+    ProductModule, ProductTranslationModule, CartModule, OrderModule, WebsocketModule, ProfileModule,PaymentModule
   ],
   controllers: [AppController],
   providers: [

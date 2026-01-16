@@ -17,7 +17,7 @@ export class ProfileController {
   }
 
   @Put()
-//   @ZodResponse({ type: UpdateProfileResDTO })
+  @ZodResponse({ type: UpdateProfileResDTO })
   updateProfile(@Body() body: UpdateMeBodyDTO, @ActiveUser('userId') userId: number) {
     return this.profileService.updateProfile({
       userId,
