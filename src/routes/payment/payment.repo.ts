@@ -2,16 +2,13 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { OrderIncludeProductSKUSnapshotType } from "src/shared/models/shared-order.model";
 import { PrismaService } from "src/shared/services/prisma.service";
 import { WebhookPaymentBodyType } from "./payment.model";
-import { MessageResType } from "src/shared/models/response.model";
 import { parse } from "date-fns";
 import { PREFIX_PAYMENT_CODE } from "src/shared/constants/other.constant";
 import { PaymentStatus } from "src/shared/constants/payment.constant";
 import { OrderStatus } from "src/shared/constants/order.constant";
 import { PaymentProducer } from "./payment.producer";
-import { SerializeAll } from "src/shared/decorators/serialize.decorator";
 
 @Injectable()
-@SerializeAll()
 export class PaymentRepo {
     constructor(private readonly prismaService: PrismaService, private readonly paymentProducer: PaymentProducer) { }
 
@@ -25,6 +22,7 @@ export class PaymentRepo {
     }
 
     async receiver(body: WebhookPaymentBodyType): Promise<number> {
+        // console.log(body)
         // 1 thêm thông tin giao dịch vào DB
         let amountIn = 0
         let amountOut = 0
@@ -65,13 +63,15 @@ export class PaymentRepo {
                 ? Number(body.code.split(PREFIX_PAYMENT_CODE)[1])
                 : Number(body.content?.split(PREFIX_PAYMENT_CODE)[1])
 
+                console.log('paymentId', paymentId)
             if (isNaN(paymentId)) {
                 throw new BadRequestException('Cannot get payment id from content')
             }
 
+
             const payment = await tx.payment.findUnique({
                 where: {
-                    id: paymentId
+                    id: paymentId,
                 },
                 include: {
                     orders: {
@@ -85,15 +85,16 @@ export class PaymentRepo {
             if (!payment) {
                 throw new BadRequestException(`Cannot find payment with id ${paymentId}`)
             }
-            const userId = payment.orders[0].userId
+            // const userId = payment.orders[0].items
             const { orders } = payment
-            const totalPrice = this.getTotalPrice(orders)
+            const totalPrice = this.getTotalPrice(orders as any)
+            console.log('totalPrice', totalPrice)
             if (totalPrice !== body.transferAmount) {
                 throw new BadRequestException(`Price not match, expected ${totalPrice} but got ${body.transferAmount}`)
             }
 
             // 3 cập nhật trạng thái đơn hàng
-            Promise.all([
+            await Promise.all([
                 tx.payment.update({
                     where: {
                         id: paymentId
